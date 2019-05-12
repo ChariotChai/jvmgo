@@ -1,4 +1,5 @@
 package heap
+
 import "math"
 
 type Slot struct {

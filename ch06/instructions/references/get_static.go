@@ -6,11 +6,11 @@ import (
 	"jvmgo/ch06/rtda/heap"
 )
 
-type PUT_STATIC struct {
+type GET_STATIC struct {
 	base.Index16Instruction
 }
 
-func (self *PUT_STATIC) Execute(frame *rtda.Frame) {
+func (self *GET_STATIC) Execute(frame *rtda.Frame) {
 	currMethod := frame.Method()
 	currClass := currMethod.Class()
 	cp := currClass.ConstantPool()
@@ -36,14 +36,14 @@ func (self *PUT_STATIC) Execute(frame *rtda.Frame) {
 	stack := frame.OpStack()
 	switch descriptor[0] {
 	case 'Z', 'B', 'C', 'S', 'I':
-		slots.SetInt(slotId, stack.PopInt())
+		stack.PushInt(slots.GetInt(slotId))
 	case 'F':
-		slots.SetFloat(slotId, stack.PopFloat())
+		stack.PushFloat(slots.GetFloat(slotId))
 	case 'J':
-		slots.SetLong(slotId, stack.PopLong())
+		stack.PushLong(slots.GetLong(slotId))
 	case 'D':
-		slots.SetDouble(slotId, stack.PopDouble())
+		stack.PushDouble(slots.GetDouble(slotId))
 	case 'L', '[':
-		slots.SetRef(slotId, stack.PopRef())
+		stack.PushRef(slots.GetRef(slotId))
 	}
 }

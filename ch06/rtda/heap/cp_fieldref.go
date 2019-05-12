@@ -26,7 +26,7 @@ func (self *FieldRef) resolveFieldRef() {
 	if field == nil {
 		panic("java.lang.NoSuchFieldError")
 	}
-	if !field.isAcceccibleTo(d) {
+	if !field.isAccessibleTo(d) {
 		panic("java.lang.IllegalAccessError")
 	}
 	self.field = field

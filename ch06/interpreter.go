@@ -1,22 +1,19 @@
 package main
 
-import "fmt"
-import "jvmgo/ch06/classfile"
-import "jvmgo/ch06/instructions"
-import "jvmgo/ch06/instructions/base"
-import "jvmgo/ch06/rtda"
+import (
+	"fmt"
+	"jvmgo/ch06/instructions"
+	"jvmgo/ch06/instructions/base"
+	"jvmgo/ch06/rtda"
+	"jvmgo/ch06/rtda/heap"
+)
 
-func interpret(methodInfo *classfile.MemberInfo) {
-	codeAttr := methodInfo.CodeAttribute()
-	maxLocals := codeAttr.MaxLocals()
-	maxStack := codeAttr.MaxStack()
-	bytecode := codeAttr.Code()
-
+func interpret(method *heap.Method) {
 	thread := rtda.NewThread()
-	frame := thread.NewFrame(uint(maxLocals), uint(maxStack))
+	frame := thread.NewFrame(method)
 	thread.PushFrame(frame)
 	defer catchErr(frame)
-	loop(thread, bytecode)
+	loop(thread, method.Code())
 }
 
 func catchErr(frame *rtda.Frame) {
@@ -33,7 +30,7 @@ func loop(thread *rtda.Thread, bytecode []byte) {
 	for {
 		pc := frame.NextPC()
 		thread.SetPC(pc)
-		
+
 		//decode
 		reader.Reset(bytecode, pc)
 		opcode := reader.ReadUint8()

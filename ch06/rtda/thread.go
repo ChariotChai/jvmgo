@@ -1,12 +1,14 @@
 package rtda
 
+import "jvmgo/ch06/rtda/heap"
+
 type Thread struct {
-	pc 		int
-	stack	*Stack
+	pc    int
+	stack *Stack
 }
 
 func NewThread() *Thread {
-	return &Thread {
+	return &Thread{
 		stack: NewStack(1024), //-Xss 设置虚拟机栈大小
 	}
 }
@@ -26,6 +28,6 @@ func (self *Thread) CurrentFrame() *Frame {
 	return self.stack.top()
 }
 
-func (self *Thread) NewFrame(maxLocals, maxStack uint) *Frame {
-	return newFrame(self, maxLocals, maxStack)
+func (self *Thread) NewFrame(method *heap.Method) *Frame {
+	return newFrame(self, method)
 }

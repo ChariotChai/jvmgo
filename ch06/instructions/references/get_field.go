@@ -6,44 +6,47 @@ import (
 	"jvmgo/ch06/rtda/heap"
 )
 
-type PUT_STATIC struct {
+type GET_FIELD struct {
 	base.Index16Instruction
 }
 
-func (self *PUT_STATIC) Execute(frame *rtda.Frame) {
+func (self *GET_FIELD) Execute(frame *rtda.Frame) {
 	currMethod := frame.Method()
 	currClass := currMethod.Class()
 	cp := currClass.ConstantPool()
 	fieldRef := cp.GetConstant(self.Index).(*heap.FieldRef)
 	field := fieldRef.ResolvedField()
-	class := field.Class()
 
-	//必须是静态字段
-	if !field.IsStatic() {
+	//必须是实例字段
+	if field.IsStatic() {
 		panic("java.lang.IncompatibleClassChangeError")
 	}
-
-	//final字段，只能在类初始化方法中赋值
+	//final字段，必须在构造函数中初始化
 	if field.IsFinal() {
-		if currClass != class || currMethod.Name() != "<clinit>" {
+		if currClass != field.Class() || currMethod.Name() != "<init>" {
 			panic("java.lang.IllegalAccessError")
 		}
 	}
 
 	descriptor := field.Descriptor()
 	slotId := field.SlotId()
-	slots := class.StaticVars()
 	stack := frame.OpStack()
+	ref := stack.PopRef()
+	if ref == nil {
+		panic("java.lang.NullPointerException")
+	}
+	slots := ref.Fields()
+
 	switch descriptor[0] {
 	case 'Z', 'B', 'C', 'S', 'I':
-		slots.SetInt(slotId, stack.PopInt())
+		stack.PushInt(slots.GetInt(slotId))
 	case 'F':
-		slots.SetFloat(slotId, stack.PopFloat())
+		stack.PushFloat(slots.GetFloat(slotId))
 	case 'J':
-		slots.SetLong(slotId, stack.PopLong())
+		stack.PushLong(slots.GetLong(slotId))
 	case 'D':
-		slots.SetDouble(slotId, stack.PopDouble())
+		stack.PushDouble(slots.GetDouble(slotId))
 	case 'L', '[':
-		slots.SetRef(slotId, stack.PopRef())
+		stack.PushRef(slots.GetRef(slotId))
 	}
 }

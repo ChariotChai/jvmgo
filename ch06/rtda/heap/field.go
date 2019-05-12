@@ -8,7 +8,7 @@ type Field struct {
 	constValueIndex uint
 }
 
-func newFields(class *Class, cfFields []*classfile.MemberInfo) *[]Field {
+func newFields(class *Class, cfFields []*classfile.MemberInfo) []*Field {
 	fields := make([]*Field, len(cfFields))
 	for i, cfField := range cfFields {
 		fields[i] = &Field{}
@@ -19,7 +19,7 @@ func newFields(class *Class, cfFields []*classfile.MemberInfo) *[]Field {
 	return fields
 }
 
-func (self *Field) copyAttrubutes(cfField *classfile.MemberInfo) {
+func (self *Field) copyAttributes(cfField *classfile.MemberInfo) {
 	if varAttr := cfField.ConstantValueAttribute(); varAttr != nil {
 		self.constValueIndex = uint(varAttr.ConstantValueIndex())
 	}
@@ -27,4 +27,8 @@ func (self *Field) copyAttrubutes(cfField *classfile.MemberInfo) {
 
 func (f *Field) SlotId() uint {
 	return f.slotId
+}
+
+func (f *Field) ConstValueIndex() uint {
+	return f.constValueIndex
 }

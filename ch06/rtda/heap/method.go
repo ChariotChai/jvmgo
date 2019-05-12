@@ -9,7 +9,7 @@ type Method struct {
 	code      []byte
 }
 
-func newMethods(class *Class, cfMethods *[]classfile.MemberInfo) []*Method {
+func newMethods(class *Class, cfMethods []*classfile.MemberInfo) []*Method {
 	methods := make([]*Method, len(cfMethods))
 	for i, cfMethod := range cfMethods {
 		methods[i] = &Method{}
@@ -34,4 +34,8 @@ func (m *Method) MaxLocals() uint {
 
 func (m *Method) MaxStack() uint {
 	return m.maxStack
+}
+
+func (m *Method) Code() []byte {
+	return m.code
 }

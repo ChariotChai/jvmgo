@@ -44,6 +44,6 @@ func (self *Frame) NextPC() int {
 	return self.nextPC
 }
 
-func (self *Frame) Method() *Method {
+func (self *Frame) Method() *heap.Method {
 	return self.method
 }

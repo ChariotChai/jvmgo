@@ -20,19 +20,43 @@ func (self *ClassMember) isAccessibleTo(d *Class) bool {
 		return true
 	}
 	c := self.class
-	if self.isProtected() {
+	if self.IsProtected() {
 		return d == c || d.getPackageName() == c.getPackageName()
 	}
-	if !self.isPrivate() {
+	if !self.IsPrivate() {
 		return c.getPackageName() == d.getPackageName()
 	}
 	return d == c
+}
+
+func (c *ClassMember) Descriptor() string {
+	return c.descriptor
+}
+
+func (c *ClassMember) Name() string {
+	return c.name
 }
 
 func (c *ClassMember) Class() *Class {
 	return c.class
 }
 
-func (c *ClassMember) IsStatic() {
+func (c *ClassMember) IsPublic() bool {
+	return 0 != c.accessFlags&ACC_PUBLIC
+}
 
+func (c *ClassMember) IsProtected() bool {
+	return 0 != c.accessFlags&ACC_PROTECTED
+}
+
+func (c *ClassMember) IsPrivate() bool {
+	return 0 != c.accessFlags&ACC_PRIVATE
+}
+
+func (c *ClassMember) IsStatic() bool {
+	return 0 != c.accessFlags&ACC_STATIC
+}
+
+func (c *ClassMember) IsFinal() bool {
+	return 0 != c.accessFlags&ACC_SYNTHETIC
 }

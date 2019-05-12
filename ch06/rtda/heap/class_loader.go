@@ -10,7 +10,7 @@ type ClassLoader struct {
 }
 
 func NewClassLoader(cp *classpath.Classpath) *ClassLoader {
-	return *ClassLoader{
+	return &ClassLoader{
 		cp:       cp,
 		classMap: make(map[string]*Class),
 	}
@@ -117,7 +117,7 @@ func calcStaticFieldSlotIds(class *Class) {
 			}
 		}
 	}
-	class.staticSlotCount = slotId
+	class.staticSlotCnt = slotId
 }
 
 func (self *Field) isLongOrDouble() bool {
@@ -139,19 +139,19 @@ func initStaticFinalVar(class *Class, field *Field) {
 	cpIndex := field.ConstValueIndex()
 	slotId := field.SlotId()
 	if cpIndex > 0 {
-		switch field.Descritor() {
+		switch field.Descriptor() {
 		case "Z", "B", "C", "S", "I":
 			val := cp.GetConstant(cpIndex).(int32)
-			vars.SetInt(val)
+			vars.SetInt(slotId, val)
 		case "J":
 			val := cp.GetConstant(cpIndex).(int64)
-			vars.SetLong(val)
+			vars.SetLong(slotId, val)
 		case "F":
 			val := cp.GetConstant(cpIndex).(float32)
-			vars.SetFloat(val)
+			vars.SetFloat(slotId, val)
 		case "D":
 			val := cp.GetConstant(cpIndex).(float64)
-			vars.SetDouble(val)
+			vars.SetDouble(slotId, val)
 		case "Ljava/lang/String;":
 			panic("todo")
 		}

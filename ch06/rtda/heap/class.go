@@ -18,12 +18,12 @@ type Class struct {
 	interfaces      []*Class
 	instanceSlotCnt uint
 	staticSlotCnt   uint
-	staticVars      *Slots
+	staticVars      Slots
 }
 
 func newClass(cf *classfile.ClassFile) *Class {
 	class := &Class{}
-	class.accessFlags = cf.accessFlags
+	class.accessFlags = cf.AccessFlags()
 	class.name = cf.ClassName()
 	class.superClassName = cf.SuperClassName()
 	class.interfaceNames = cf.InterfaceNames()
@@ -33,8 +33,20 @@ func newClass(cf *classfile.ClassFile) *Class {
 	return class
 }
 
+func (c *Class) ConstantPool() *ConstantPool {
+	return c.constantPool
+}
+
 func (self *Class) IsPublic() bool {
 	return 0 != self.accessFlags&ACC_PUBLIC
+}
+
+func (self *Class) IsInterface() bool {
+	return 0 != self.accessFlags&ACC_INTERFACE
+}
+
+func (self *Class) IsAbstract() bool {
+	return 0 != self.accessFlags&ACC_ABSTRACT
 }
 
 func (self *Class) getPackageName() string {
@@ -48,13 +60,23 @@ func (self *Class) NewObject() *Object {
 	return newObject(self)
 }
 
-func newObject(class *Class) *Object {
-	return &Object{
-		class:  class,
-		fields: newSlots(class.instanceSlotCnt),
-	}
+func (self *Class) StaticVars() Slots {
+	return self.staticVars
 }
 
-func (self *Class) StaticVars() *Slots {
-	return self.staticVars
+func (self *Class) IsAccessibleTo(c *Class) bool {
+	return self.IsPublic() || self.getPackageName() == c.getPackageName()
+}
+
+func (self *Class) GetMainMethod() *Method {
+	return self.getStaticMethod("main", "[Ljava/lang/String;)V")
+}
+
+func (self *Class) getStaticMethod(name, descriptor string) *Method {
+	for _, method := range self.methods {
+		if method.IsStatic() && method.name == name && method.descriptor == descriptor {
+			return method
+		}
+	}
+	return nil
 }

@@ -9,7 +9,7 @@ type ConstantPool struct {
 	consts []Constant
 }
 
-func newConstantPool(class *Class, cfCp *classfile.ConstantPool) *ConstantPool {
+func newConstantPool(class *Class, cfCp classfile.ConstantPool) *ConstantPool {
 	cpCount := len(cfCp)
 	consts := make([]Constant, cpCount)
 	rtCp := &ConstantPool{class, consts}
