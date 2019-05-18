@@ -7,11 +7,11 @@ import (
 	"jvmgo/ch06/rtda/heap"
 )
 
-type INVOKE_VIRUAL struct {
+type INVOKE_VIRTUAL struct {
 	base.Index16Instruction
 }
 
-func (self *INVOKE_VIRUAL) Execute(frame *rtda.Frame) {
+func (self *INVOKE_VIRTUAL) Execute(frame *rtda.Frame) {
 	cp := frame.Method().Class().ConstantPool()
 	methodRef := cp.GetConstant(self.Index).(*heap.MethodRef)
 	if methodRef.Name() == "println" {

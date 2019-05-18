@@ -9,6 +9,7 @@ import . "jvmgo/ch06/instructions/conversions"
 import . "jvmgo/ch06/instructions/extended"
 import . "jvmgo/ch06/instructions/loads"
 import . "jvmgo/ch06/instructions/math"
+import . "jvmgo/ch06/instructions/references"
 import . "jvmgo/ch06/instructions/stack"
 import . "jvmgo/ch06/instructions/stores"
 
@@ -482,6 +483,54 @@ func NewInstruction(opcode byte) base.Instruction {
 		return &TABLE_SWITCH{}
 	case 0xab:
 		return &LOOKUP_SWITCH{}
+	// case 0xac:
+	// 	return ireturn
+	// case 0xad:
+	// 	return lreturn
+	// case 0xae:
+	// 	return freturn
+	// case 0xaf:
+	// 	return dreturn
+	// case 0xb0:
+	// 	return areturn
+	// case 0xb1:
+	// return _return
+	case 0xb2:
+		return &GET_STATIC{}
+	case 0xb3:
+		return &PUT_STATIC{}
+	case 0xb4:
+		return &GET_FIELD{}
+	case 0xb5:
+		return &PUT_FIELD{}
+	case 0xb6:
+		return &INVOKE_VIRTUAL{}
+	case 0xb7:
+		return &INVOKE_SPECIAL{}
+	// case 0xb8:
+	// 	return &INVOKE_STATIC{}
+	// case 0xb9:
+	// 	return &INVOKE_INTERFACE{}
+	// case 0xba:
+	// 	return &INVOKE_DYNAMIC{}
+	case 0xbb:
+		return &NEW{}
+	// case 0xbc:
+	// 	return &NEW_ARRAY{}
+	// case 0xbd:
+	// 	return &ANEW_ARRAY{}
+	// case 0xbe:
+	// 	return arraylength
+	// case 0xbf:
+	// 	return athrow
+	case 0xc0:
+		return &CHECK_CAST{}
+	case 0xc1:
+		return &INSTANCE_OF{}
+	// case 0xc2:
+	// 	return monitorenter
+	// case 0xc3:
+	// 	return monitorexit
 	case 0xc4:
 		return &WIDE{}
 	// case 0xc5:

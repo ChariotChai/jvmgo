@@ -13,8 +13,8 @@ type CHECK_CAST struct {
 func (self *CHECK_CAST) Execute(frame *rtda.Frame) {
 	stack := frame.OpStack()
 	ref := stack.PopRef()
+	stack.PushRef(ref)
 	if ref == nil {
-		stack.PushInt(0)
 		return
 	}
 	cp := frame.Method().Class().ConstantPool()

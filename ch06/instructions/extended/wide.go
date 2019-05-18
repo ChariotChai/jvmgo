@@ -7,7 +7,7 @@ import "jvmgo/ch06/instructions/math"
 import "jvmgo/ch06/instructions/stores"
 
 type WIDE struct {
-	modifiedInstruction 	base.Instruction
+	modifiedInstruction base.Instruction
 }
 
 func (self *WIDE) FetchOp(reader *base.BytecodeReader) {
