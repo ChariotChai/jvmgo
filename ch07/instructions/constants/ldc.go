@@ -27,6 +27,9 @@ func _ldc(frame *rtda.Frame, index uint) {
 	stack := frame.OpStack()
 	cp := frame.Method().Class().ConstantPool()
 	c := cp.GetConstant(index)
+
+	fmt.Println("type:", reflect.TypeOf(c))
+
 	switch c.(type) {
 	case int32:
 		stack.PushInt(c.(int32))
@@ -46,7 +49,7 @@ func (self *LDC2_W) Execute(frame *rtda.Frame) {
 	cp := frame.Method().Class().ConstantPool()
 	c := cp.GetConstant(self.Index)
 
-	fmt.Println("type:", reflect.TypeOf(c))
+	fmt.Println("type: {}, {}", reflect.TypeOf(c), c.(int64))
 
 	switch c.(type) {
 	case int64:
