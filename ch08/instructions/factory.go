@@ -157,6 +157,7 @@ var (
 	lreturn     = &LRETURN{}
 	dreturn     = &DRETURN{}
 	areturn     = &ARETURN{}
+	arraylength = &ARRAY_LENGTH{}
 )
 
 func NewInstruction(opcode byte) base.Instruction {
@@ -541,8 +542,8 @@ func NewInstruction(opcode byte) base.Instruction {
 		return &NEW_ARRAY{}
 	case 0xbd:
 		return &ANEW_ARRAY{}
-	// case 0xbe:
-	// 	return arraylength
+	case 0xbe:
+		return arraylength
 	// case 0xbf:
 	// 	return athrow
 	case 0xc0:
