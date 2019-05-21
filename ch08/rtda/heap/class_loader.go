@@ -1,8 +1,8 @@
 package heap
 
 import "fmt"
-import "jvmgo/ch07/classfile"
-import "jvmgo/ch07/classpath"
+import "jvmgo/ch08/classfile"
+import "jvmgo/ch08/classpath"
 
 type ClassLoader struct {
 	cp          *classpath.Classpath
@@ -16,16 +16,17 @@ func NewClassLoader(cp *classpath.Classpath, verboseFlag bool) *ClassLoader {
 		classMap:    make(map[string]*Class),
 		verboseFlag: verboseFlag,
 	}
-
 }
 
 func (self *ClassLoader) LoadClass(name string) *Class {
 	if class, ok := self.classMap[name]; ok {
 		return class
 	}
+
 	if name[0] == '[' {
 		return self.loadArrayClass(name)
 	}
+
 	return self.loadNonArrayClass(name) //数组类与普通类不同，其数据不是来自class文件，而是有Java虚拟机在运行期间生成
 }
 
@@ -48,7 +49,7 @@ func (self *ClassLoader) loadArrayClass(name string) *Class {
 		superClass:  self.LoadClass("java/lang/Object"),
 		interfaces: []*Class{
 			self.LoadClass("java/lang/Cloneable"),
-			self.LoadClass("java/io/Serializeable"),
+			self.LoadClass("java/io/Serializable"),
 		},
 	}
 	self.classMap[name] = class
@@ -177,6 +178,10 @@ func initStaticFinalVar(class *Class, field *Field) {
 			val := cp.GetConstant(cpIndex).(float64)
 			vars.SetDouble(slotId, val)
 		case "Ljava/lang/String;":
+			goStr := cp.GetConstant(cpIndex).(string)
+			jStr := JString(class.Loader(), goStr)
+			vars.SetRef(slotId, jStr)
+		default:
 			panic("todo")
 		}
 	}
