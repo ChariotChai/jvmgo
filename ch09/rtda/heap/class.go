@@ -136,6 +136,17 @@ func (self *Class) getField(name, descriptor string, isStatic bool) *Field {
 	return nil
 }
 
+func (self *Class) getMethod(name, descriptor string, isStatic bool) *Method {
+	for c := self; c != nil; c = c.superClass {
+		for _, method := range c.methods {
+			if method.IsStatic() == isStatic && method.name == name && method.descriptor == descriptor {
+				return method
+			}
+		}
+	}
+	return nil
+}
+
 func (c *Class) isJlObject() bool {
 	return c.name == "java/lang/Object"
 }
@@ -154,4 +165,23 @@ func (c *Class) JavaName() string {
 
 func (c *Class) JClass() *Object {
 	return c.jClass
+}
+
+func (c *Class) IsPrimitive() bool {
+	_, ok := primitiveTypes[c.name]
+	return ok
+}
+
+func (c *Class) GetRefVar(fieldName, fieldDescriptor string) *Object {
+	field := c.getField(fieldName, fieldDescriptor, false)
+	return c.staticVars.GetRef(field.slotId)
+}
+
+func (c *Class) SetRefVar(fieldName, fieldDescriptor string, ref *Object) {
+	field := c.getField(fieldName, fieldDescriptor, true)
+	c.staticVars.SetRef(field.slotId, ref)
+}
+
+func (c *Class) GetInstanceMethod(name, descriptor string) *Method {
+	return c.getMethod(name, descriptor, false)
 }

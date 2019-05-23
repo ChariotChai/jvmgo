@@ -32,3 +32,12 @@ func GoString(jStr *Object) string {
 	charArr := jStr.GetRefVar("value", "[C")
 	return utf16ToString(charArr.Chars())
 }
+
+func InternString(jStr *Object) *Object {
+	goStr := GoString(jStr)
+	if internedStr, ok := internedStrings[goStr]; ok {
+		return internedStr
+	}
+	internedStrings[goStr] = jStr
+	return jStr
+}
