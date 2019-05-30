@@ -50,3 +50,33 @@ func (self *CodeAttribute) MaxStack() uint {
 func (self *CodeAttribute) Code() []byte {
 	return self.code
 }
+
+func (c *CodeAttribute) ExceptionTable() []*ExceptionTableEntry {
+	return c.exceptionTable
+}
+
+func (self *CodeAttribute) LineNumberTableAttribute() *LineNumberTableAttribute {
+	for _, attrInfo := range self.attributes {
+		switch attrInfo.(type) {
+		case *LineNumberTableAttribute:
+			return attrInfo.(*LineNumberTableAttribute)
+		}
+	}
+	return nil
+}
+
+func (e *ExceptionTableEntry) StartPc() uint16 {
+	return e.startPc
+}
+
+func (e *ExceptionTableEntry) EndPc() uint16 {
+	return e.endPc
+}
+
+func (e *ExceptionTableEntry) HandlerPc() uint16 {
+	return e.handlerPc
+}
+
+func (e *ExceptionTableEntry) CatchType() uint16 {
+	return e.catchType
+}

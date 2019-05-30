@@ -1,9 +1,14 @@
 package lang
 
 import (
+	"jvmgo/ch10/native"
 	"jvmgo/ch10/rtda"
 	"jvmgo/ch10/rtda/heap"
 )
+
+func init() {
+	native.Register("java/lang/Throwable", "fillInStackTrace", "(I)Ljava/lang/Throwable;", fillInStackTrace)
+}
 
 type StackTraceElement struct {
 	fileName   string
@@ -40,10 +45,10 @@ func distanceToObject(class *heap.Class) int {
 func createStackTraceElement(frame *rtda.Frame) *StackTraceElement {
 	method := frame.Method()
 	class := method.Class()
-	return &StackTraceElement {
-		fileName: class.SourceFile(),
-		className: class.JavaName(),
+	return &StackTraceElement{
+		fileName:   class.SourceFile(),
+		className:  class.JavaName(),
 		methodName: method.Name(),
-		lineNumber: method.GetLineNumber(frame.NextPC() - 1)
+		lineNumber: method.GetLineNumber(frame.NextPC() - 1),
 	}
 }

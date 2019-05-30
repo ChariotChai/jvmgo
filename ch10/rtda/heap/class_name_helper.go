@@ -7,6 +7,7 @@ var primitiveTypes = map[string]string{
 	"short":   "S",
 	"int":     "I",
 	"long":    "J",
+	"char":    "C",
 	"float":   "F",
 	"double":  "D",
 }

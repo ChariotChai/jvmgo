@@ -29,12 +29,12 @@ func (self *GET_STATIC) Execute(frame *rtda.Frame) {
 		panic("java.lang.IncompatibleClassChangeError")
 	}
 
-	//final字段，只能在类初始化方法中赋值
-	if field.IsFinal() {
-		if currClass != class || currMethod.Name() != "<clinit>" {
-			panic("java.lang.IllegalAccessError")
-		}
-	}
+	// //final字段，只能在类初始化方法中赋值
+	// if field.IsFinal() {
+	// 	if currClass != class || currMethod.Name() != "<clinit>" {
+	// 		panic("java.lang.IllegalAccessError")
+	// 	}
+	// }
 
 	descriptor := field.Descriptor()
 	slotId := field.SlotId()

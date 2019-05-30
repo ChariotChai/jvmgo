@@ -110,3 +110,13 @@ func (self *ClassFile) ConstantPool() ConstantPool {
 func (self *ClassFile) AccessFlags() uint16 {
 	return self.accessFlags
 }
+
+func (c *ClassFile) SourceFileAttribute() *SourceFileAttribute {
+	for _, attrInfo := range c.attributes {
+		switch attrInfo.(type) {
+		case *SourceFileAttribute:
+			return attrInfo.(*SourceFileAttribute)
+		}
+	}
+	return nil
+}

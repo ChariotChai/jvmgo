@@ -99,7 +99,7 @@ func (m *Method) injectCodeAttribute(returnType string) {
 	}
 }
 
-func (m *Method) FindeExceptionHandler(exClass *Class, pc int) int {
+func (m *Method) FindExceptionHandler(exClass *Class, pc int) int {
 	handler := m.exceptionTable.findExceptionHandler(exClass, pc)
 	if handler != nil {
 		return handler.handlerPc

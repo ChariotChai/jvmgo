@@ -193,7 +193,7 @@ func (c *Class) SourceFile() string {
 }
 
 func getSourceFile(cf *classfile.ClassFile) string {
-	if sfAttr := cf.SoueceFileAttribute(); sfAttr != nil {
+	if sfAttr := cf.SourceFileAttribute(); sfAttr != nil {
 		return sfAttr.FileName()
 	}
 	return "Unknown"

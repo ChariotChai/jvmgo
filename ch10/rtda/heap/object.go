@@ -40,3 +40,7 @@ func (o *Object) SetRefVar(name, descriptor string, ref *Object) {
 func (o *Object) Extra() interface{} {
 	return o.extra
 }
+
+func (self *Object) SetExtra(o interface{}) {
+	self.extra = o
+}
